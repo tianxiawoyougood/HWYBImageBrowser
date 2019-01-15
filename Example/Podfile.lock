@@ -1,0 +1,16 @@
+PODS:
+  - HWYBImageBrowser (0.1.0)
+
+DEPENDENCIES:
+  - HWYBImageBrowser (from `../`)
+
+EXTERNAL SOURCES:
+  HWYBImageBrowser:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  HWYBImageBrowser: 7ad94b6b325546c1c5bea83c78bc4d588dff75e4
+
+PODFILE CHECKSUM: 27285d3d181dca09e53f073ef86064757c73c94f
+
+COCOAPODS: 1.5.3
