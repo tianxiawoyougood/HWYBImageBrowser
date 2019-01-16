@@ -27,11 +27,7 @@
     "HWYBImageBrowser/Classes/Base/*.{h,m}",
     "HWYBImageBrowser/Classes/AuxiliaryView/*.{h,m}"
   ],
-  "resource_bundles": {
-    "HWYBImageBrowser": [
-      "HWYBImageBrowser/Assets/*"
-    ]
-  },
+  "resources": "HWYBImageBrowser/Assets/YBImageBrowser.bundle",
   "dependencies": {
     "SDWebImage": [
 

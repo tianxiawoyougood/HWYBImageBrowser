@@ -32,9 +32,10 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'HWYBImageBrowser/Classes/*.{h,m}', 'HWYBImageBrowser/Classes/VideoBrowse/*.{h,m}', 'HWYBImageBrowser/Classes/Protocol/*.{h,m}', 'HWYBImageBrowser/Classes/ImageBrowse/*.{h,m}', 'HWYBImageBrowser/Classes/Helper/*.{h,m}', 'HWYBImageBrowser/Classes/Base/*.{h,m}', 'HWYBImageBrowser/Classes/AuxiliaryView/*.{h,m}'
   
-  s.resource_bundles = {
-    'HWYBImageBrowser' => ['HWYBImageBrowser/Assets/*']
-  }
+  s.resources = "HWYBImageBrowser/Assets/YBImageBrowser.bundle"
+  #s.resource_bundles = {
+  #  'YBImageBrowser' => ['HWYBImageBrowser/Assets/*']
+  #}
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
