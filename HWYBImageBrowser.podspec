@@ -30,7 +30,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'HWYBImageBrowser/Classes/*.{h,m}', 'HWYBImageBrowser/Classes/VideoBrowse/.{h,m}', 'HWYBImageBrowser/Classes/Protocol/*.{h,m}', 'HWYBImageBrowser/Classes/ImageBrowse/*.{h,m}', 'HWYBImageBrowser/Classes/Helper/*.{h,m}', 'HWYBImageBrowser/Classes/Base/*.{h,m}', 'HWYBImageBrowser/Classes/AuxiliaryView/*.{h,m}'
+  s.source_files = 'HWYBImageBrowser/Classes/*.{h,m}', 'HWYBImageBrowser/Classes/VideoBrowse/*.{h,m}', 'HWYBImageBrowser/Classes/Protocol/*.{h,m}', 'HWYBImageBrowser/Classes/ImageBrowse/*.{h,m}', 'HWYBImageBrowser/Classes/Helper/*.{h,m}', 'HWYBImageBrowser/Classes/Base/*.{h,m}', 'HWYBImageBrowser/Classes/AuxiliaryView/*.{h,m}'
   
   s.resource_bundles = {
     'HWYBImageBrowser' => ['HWYBImageBrowser/Assets/*']

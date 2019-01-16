@@ -18,7 +18,7 @@
 #import "YBImageBrowserSheetViewProtocol.h"
 #import "YBImageBrowserToolBar.h"
 #import "YBImageBrowserSheetView.h"
-#import "YBimagebrowserBottomBar.h"
+#import "YBImageBrowserBottomBar.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
