@@ -247,6 +247,9 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "571100944@qq.com";
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = A6C6R885GZ;
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -326,12 +329,18 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-HWYBImageBrowser_Example/Pods-HWYBImageBrowser_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/HWYBImageBrowser/HWYBImageBrowser.framework",
+				"${BUILT_PRODUCTS_DIR}/ReactiveObjC/ReactiveObjC.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/YYImage/YYImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HWYBImageBrowser.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveObjC.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -497,6 +506,7 @@
 			baseConfigurationReference = 7F8000EF1F7BE0352D6913ED /* Pods-HWYBImageBrowser_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = A6C6R885GZ;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HWYBImageBrowser/HWYBImageBrowser-Prefix.pch";
 				INFOPLIST_FILE = "HWYBImageBrowser/HWYBImageBrowser-Info.plist";
@@ -512,6 +522,7 @@
 			baseConfigurationReference = 8832CDDC9C805D6456D4F35C /* Pods-HWYBImageBrowser_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = A6C6R885GZ;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HWYBImageBrowser/HWYBImageBrowser-Prefix.pch";
 				INFOPLIST_FILE = "HWYBImageBrowser/HWYBImageBrowser-Info.plist";

@@ -1,9 +1,9 @@
 {
   "name": "HWYBImageBrowser",
   "version": "0.1.0",
-  "summary": "A short description of HWYBImageBrowser.",
+  "summary": "修改YBImageBrowser库完成业务需求",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/571100944@qq.com/HWYBImageBrowser",
+  "homepage": "https://github.com/tianxiawoyougood/HWYBImageBrowser.git",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,11 +12,22 @@
     "571100944@qq.com": "571100944@qq.com"
   },
   "source": {
-    "git": "https://github.com/571100944@qq.com/HWYBImageBrowser.git",
+    "git": "https://github.com/tianxiawoyougood/HWYBImageBrowser.git",
     "tag": "0.1.0"
   },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "HWYBImageBrowser/Classes/**/*"
+  "source_files": "HWYBImageBrowser/Classes/**/*.{h,m}",
+  "dependencies": {
+    "SDWebImage": [
+
+    ],
+    "YYImage": [
+
+    ],
+    "ReactiveObjC": [
+
+    ]
+  }
 }
