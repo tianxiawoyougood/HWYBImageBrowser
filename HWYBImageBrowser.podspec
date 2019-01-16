@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'HWYBImageBrowser'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = '修改YBImageBrowser库完成业务需求'
 
 # This description is used to generate tags and improve search results.
