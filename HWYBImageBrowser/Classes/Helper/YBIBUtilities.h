@@ -40,6 +40,16 @@ dispatch_async(queue, block);\
 #define YBIB_HEIGHT_STATUSBAR     (YBIB_IS_IPHONEX ? 44.0 : 20.0)
 
 
+#define kYBScreenWidth                       (CGRectGetWidth([[UIScreen mainScreen] bounds]))
+#define kYBScreenHeight                      (CGRectGetHeight([[UIScreen mainScreen] bounds]))
+#define kYBScreenScale  [[UIScreen mainScreen] scale]
+
+#define kYBDesignScaleXForIP6 ([UIScreen mainScreen].bounds.size.width / 375.0)
+#define kYBDesignScaleYForIP6 ([UIScreen mainScreen].bounds.size.height / 667.0)
+
+#define YBRGB(r, g, b) ([UIColor colorWithRed:(r / 255.0) green:(g / 255.0) blue:(b / 255.0) alpha:1.0])
+#define YBRGBA(r, g, b,a) ([UIColor colorWithRed:(r / 255.0) green:(g / 255.0) blue:(b / 255.0) alpha:a])
+
 UIWindow *YBIBGetNormalWindow(void);
 
 UIViewController *YBIBGetTopController(void);

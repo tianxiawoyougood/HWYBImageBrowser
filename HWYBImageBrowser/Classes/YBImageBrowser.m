@@ -17,15 +17,17 @@
 #import "YBIBCopywriter.h"
 #import <Photos/PHPhotoLibrary.h>
 #import <Photos/PHAssetChangeRequest.h>
-#import "AppDelegate.h"
-#import "HWGoodDetailController.h"
-#import "HWDisMiniCodeView.h"
-#import "HWShareGoodsModel.h"
-#import "HWDisPlayVideoController.h"
-#import "HWMineAgentCenter.h"
-#import "HWDisMaterialModel.h"
-#import "HWSaveVideoManager.h"
 
+#if __has_include(<SDWebImage/SDImageCache.h>)
+#import <SDWebImage/SDImageCache.h>
+#else
+#import "SDImageCache.h"
+#endif
+#if __has_include(<ReactiveObjC/ReactiveObjC.h>)
+#import <ReactiveObjC/ReactiveObjC.h>
+#else
+#import "ReactiveObjC.h"
+#endif
 
 @interface YBImageBrowser () <UIViewControllerTransitioningDelegate, YBImageBrowserViewDelegate, YBImageBrowserDataSource> {
     BOOL _isFirstViewDidAppear;
@@ -149,7 +151,7 @@
 - (void)setStatusBarHide:(BOOL)hide {
     if (self.shouldHideStatusBar) {
 //        self.view.window.windowLevel = hide ? UIWindowLevelStatusBar + 1 : _windowLevelByDefault;
-        [self setStatusBarBackgroundColor:hide ? RGB(0, 0, 0) : RGB(255, 255, 255)];
+        [self setStatusBarBackgroundColor:hide ? YBRGB(0, 0, 0) : YBRGB(255, 255, 255)];
     }
 }
 
@@ -166,11 +168,15 @@
 }
 
 - (void)showVideoBottomBar {
-    [self.defaultBottomBar showVideoToolBar:YES checkGoods_info:YES];
+    if (self.delegate) {
+        [self.delegate yb_imageBrowser:self showVideoBottomBar:YES data:[self currentData]];
+    }
 }
 
 - (void)hideVideoBottomBar {
-    [self.defaultBottomBar showVideoToolBar:NO checkGoods_info:NO];
+    if (self.delegate) {
+        [self.delegate yb_imageBrowser:self showVideoBottomBar:NO data:[self currentData]];
+    }
 }
 
 
@@ -181,194 +187,41 @@
     @weakify(self);
     [[self.defaultBottomBar.miniBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
         @strongify(self);
-        [self dealWithType:0 index:self.currentIndex];
+        if (self.delegate) {
+            [self.delegate yb_imageBrowser:self bottomBarClickedType:YBImageBrowserBottomBarClickedTypeMini data:[self currentData]];
+        }
     }];
     
     [[self.defaultBottomBar.saveBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
         @strongify(self);
-        [self dealWithType:1 index:self.currentIndex];
+        if (self.delegate) {
+            [self.delegate yb_imageBrowser:self bottomBarClickedType:YBImageBrowserBottomBarClickedTypeSave data:[self currentData]];
+        }
     }];
     
     [[self.defaultBottomBar.lookBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
         @strongify(self);
-        [self dealWithType:2 index:self.currentIndex];
+        if (self.delegate) {
+            [self.delegate yb_imageBrowser:self bottomBarClickedType:YBImageBrowserBottomBarClickedTypeLook data:[self currentData]];
+        }
     }];
     
     [[self.defaultBottomBar.downLoadButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
         @strongify(self);
-        [self saveVideo];
+        if (self.delegate) {
+            [self.delegate yb_imageBrowser:self bottomBarClickedType:YBImageBrowserBottomBarClickedTypeDownload data:[self currentData]];
+        }
     }];
     
     [[self.defaultBottomBar.detailButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(__kindof UIControl * _Nullable x) {
         @strongify(self);
-        [self lookDetailFromVideo];
-    }];
-    
-}
-
-- (void)dealWithType:(NSInteger)type index:(NSInteger)index{
-    
-    id<YBImageBrowserCellDataProtocol> data = [self currentData];
-    
-    YBImageBrowseCellData *imageCellData = nil;
-    if ([data isKindOfClass:[YBImageBrowseCellData class]]) {
-        imageCellData = data;
-    }else{
-        return;
-    }
-    
-    HWDisMaterialModel *materiaModel = imageCellData.extraData;
-    
-    if (type == 0) {//生成小程序码 保存本地
-        WS(weakSelf);
-        HWDisMiniCodeView *codeView = [[HWDisMiniCodeView alloc] init];
-        codeView.frame = CGRectMake(kScreenWidth, 0, 375, 1);
-        [self.view addSubview:codeView];
-        codeView.imgBlock = ^(HWDisMiniCodeView *tmp, UIImage *image) {
-            if (image == nil) {
-                [KKKNoticeHelper showNormalNoticeWithString:@"图片生成失败"];
-            }else{
-                [weakSelf savePicture:image];
-            }
-            [tmp removeFromSuperview];
-        };
-        
-        HWShareGoodsModel *model = [[HWShareGoodsModel alloc] init];
-        model.goodId = materiaModel.goods_info.goods_id;
-        model.goodName = materiaModel.name;
-        model.detail = materiaModel.details;
-        model.picUrl = materiaModel.img_array[imageCellData.sectionIndex];
-        model.miniPath = materiaModel.goods_info.wechat_detail_url;
-        codeView.model = model;
-        
-    }else if (type == 1){//保存图片
-        UIImage *image = imageCellData.image;
-        [self savePicture:image];
-    }else{
-        //查看详情
-        [self hide];
-        
-        UIViewController *vc = HWAppDelegate.currentVC;
-        HWGoodDetailController *detailVC = [[HWGoodDetailController alloc] initWithGoodsId:materiaModel.goods_info.goods_id];
-        detailVC.hidesBottomBarWhenPushed= YES;
-        [vc.navigationController pushViewController:detailVC animated:YES];
-    }
-}
-
-- (void)savePicture:(UIImage *)image{
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusRestricted || status == PHAuthorizationStatusDenied){
-        //无权限
-        [self showTip];
-        return;
-    }
-    WS(weakSelf);
-    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-        if (status == PHAuthorizationStatusAuthorized) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf saveImage:image];
-            });
+        if (self.delegate) {
+            [self.delegate yb_imageBrowser:self bottomBarClickedType:YBImageBrowserBottomBarClickedTypeDetail data:[self currentData]];
         }
     }];
+    
 }
 
-- (void)saveImage:(UIImage *)image{
-    
-    if (image == nil) {
-        [KKKNoticeHelper showNormalNoticeWithString:@"保存图片错误"];
-        return;
-    }
-    
-    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-        [PHAssetChangeRequest creationRequestForAssetFromImage:image];
-    } completionHandler:^(BOOL success, NSError * _Nullable error) {
-        if (error != nil) {
-            return;
-        }
-        [KKKNoticeHelper showNormalNoticeWithString:@"保存图片成功"];
-        
-    }];
-}
-
-- (void)showTip{
-    [KKKNoticeHelper showHudWithTitle:@"开启相册权限，更好卖货" message:@"" cancleMessage:@"取消" sureMessage:@"立即开启" cancleAction:^{
-        
-    } sureAction:^{
-        NSURL *settingURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-        
-        if ([[UIApplication sharedApplication] canOpenURL:settingURL]) {
-            [[UIApplication sharedApplication] openURL:settingURL];
-        }
-        
-        [[UIApplication sharedApplication] openURL:settingURL];
-    }];
-}
-
-
-- (void)saveVideo {
-    
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusRestricted || status == PHAuthorizationStatusDenied){
-        //无权限
-        [self showTip];
-        return;
-    }
-    WS(weakSelf);
-    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-        if (status == PHAuthorizationStatusAuthorized) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf downloadVideo];
-            });
-        }
-    }];
-}
-
-
-- (void)downloadVideo {
-    
-    id<YBImageBrowserCellDataProtocol> data = [self currentData];
-    
-    YBVideoBrowseCellData *videoCellData = nil;
-    if ([data isKindOfClass:[YBVideoBrowseCellData class]]) {
-        videoCellData = data;
-    }else{
-        return;
-    }
-    HWDisMaterialModel *materiaModel = videoCellData.extraData;
-    
-    HWBaseViewController *vc = (HWBaseViewController *)HWAppDelegate.currentVC;
-    [vc setStatusBarBackgroundColor:[UIColor clearColor]];
-    [[HWSaveVideoManager sharedInstance] saveVideoWithVideoUrlStr:materiaModel.video progress:nil success:^{
-        [KKKNoticeHelper showNormalNoticeWithString:@"视频保存成功"];
-        [vc setStatusBarBackgroundColor:[UIColor whiteColor]];
-        
-    } failuer:^(NSError *error) {
-        NSLog(@"ss");
-        [vc setStatusBarBackgroundColor:[UIColor whiteColor]];
-        
-    }];
-}
-
-- (void)lookDetailFromVideo {
-    
-    id<YBImageBrowserCellDataProtocol> data = [self currentData];
-    
-    YBVideoBrowseCellData *videoCellData = nil;
-    if ([data isKindOfClass:[YBVideoBrowseCellData class]]) {
-        videoCellData = data;
-    }else{
-        return;
-    }
-    HWDisMaterialModel *materiaModel = videoCellData.extraData;
-    
-    //查看详情
-    [self hide];
-    
-    UIViewController *vc = HWAppDelegate.currentVC;
-    HWGoodDetailController *detailVC = [[HWGoodDetailController alloc] initWithGoodsId:materiaModel.goods_info.goods_id];
-    detailVC.hidesBottomBarWhenPushed= YES;
-    [vc.navigationController pushViewController:detailVC animated:YES];
-}
 
 
 #pragma mark - gesture
@@ -426,7 +279,8 @@
         }
     }];
     
-    self.defaultBottomBar.frame = CGRectMake(0, kScreenHeight - 59*kDesignScaleXForIP6 - [HWUIManager iphoneXTabrOffset], kScreenWidth, 59*kDesignScaleXForIP6 + [HWUIManager iphoneXTabrOffset]);
+    CGFloat tabbBarHeight = [YBIBUtilities isIphoneX] ? 34 : 0;
+    self.defaultBottomBar.frame = CGRectMake(0, kYBScreenHeight - 59*kYBDesignScaleXForIP6 - tabbBarHeight, kYBScreenWidth, 59*kYBDesignScaleXForIP6 + tabbBarHeight);
     [self.view addSubview:self.defaultBottomBar];
 }
 
@@ -470,16 +324,7 @@
             [obj yb_browserPageIndexChanged:index totalPage:[self.dataSource yb_numberOfCellForImageBrowserView:self.browserView] data:data];
         }
     }];
-    
-    if ([data isKindOfClass:[YBImageBrowseCellData class]]) {
-        YBImageBrowseCellData *imageData = data;
-        self.defaultBottomBar.materiaModel = imageData.extraData;
-    }else{
-        YBVideoBrowseCellData *videoData = data;
-        self.defaultBottomBar.materiaModel = videoData.extraData;
-    }
 
-    
 }
 
 #pragma mark - public

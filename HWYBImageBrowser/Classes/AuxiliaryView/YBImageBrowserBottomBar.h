@@ -10,7 +10,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class HWDisMaterialModel;
 @interface YBImageBrowserBottomBar : UIView
 
 @property (nonatomic, strong) UIButton *miniBtn;
@@ -20,10 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIButton * downLoadButton;
 @property (nonatomic, strong) UIButton * detailButton;
 
-@property (nonatomic, strong) HWDisMaterialModel *materiaModel;
-
-
-- (void)showVideoToolBar:(BOOL)isShow  checkGoods_info:(BOOL)isCheck;
 
 @end
 

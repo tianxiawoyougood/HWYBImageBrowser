@@ -13,7 +13,7 @@
 #import "YBIBUtilities.h"
 #import "YBImageBrowseCellData.h"
 #import "YBVideoBrowseCellData.h"
-#import "HWDisMaterialModel.h"
+
 
 static CGFloat kToolBarDefaultsHeight = 50.0;
 
@@ -22,7 +22,7 @@ static CGFloat kToolBarDefaultsHeight = 50.0;
     id<YBImageBrowserCellDataProtocol> _data;
 }
 @property (nonatomic, strong) UILabel *indexLabel;
-//@property (nonatomic, strong) UIButton *operationButton;
+
 @property (nonatomic, strong) CAGradientLayer *gradient;
 @end
 
@@ -38,7 +38,7 @@ static CGFloat kToolBarDefaultsHeight = 50.0;
     if (self) {
         [self.layer addSublayer:self.gradient];
         [self addSubview:self.indexLabel];
-//        [self addSubview:self.operationButton];
+
     }
     return self;
 }
@@ -46,8 +46,7 @@ static CGFloat kToolBarDefaultsHeight = 50.0;
 #pragma mark - public
 
 - (void)setOperationButtonImage:(UIImage *)image title:(NSString *)title operation:(YBImageBrowserToolBarOperationBlock)operation {
-//    [self.operationButton setImage:image forState:UIControlStateNormal];
-//    [self.operationButton setTitle:title forState:UIControlStateNormal];
+
     self->_operation = operation;
     self->_operationType = YBImageBrowserToolBarOperationTypeCustom;
 }
@@ -59,37 +58,15 @@ static CGFloat kToolBarDefaultsHeight = 50.0;
 #pragma mark - <YBImageBrowserToolBarProtocol>
 
 - (void)yb_browserUpdateLayoutWithDirection:(YBImageBrowserLayoutDirection)layoutDirection containerSize:(CGSize)containerSize {
-    CGFloat height = kToolBarDefaultsHeight, width = containerSize.width, buttonWidth = 53, labelWidth = width / 3.0, hExtra = 0;
+    CGFloat height = kToolBarDefaultsHeight, width = containerSize.width, hExtra = 0;
     if (containerSize.height > containerSize.width && YBIB_IS_IPHONEX) height += YBIB_HEIGHT_STATUSBAR;
     if (containerSize.height < containerSize.width && YBIB_IS_IPHONEX) hExtra += YBIB_HEIGHT_EXTRABOTTOM;
     
     self.frame = CGRectMake(0, 0, width, height);
     self.gradient.frame = self.bounds;
-//    self.indexLabel.frame = CGRectMake(15 + hExtra, height - kToolBarDefaultsHeight, labelWidth, kToolBarDefaultsHeight);
-//    self.operationButton.frame = CGRectMake(width - buttonWidth - hExtra, height - kToolBarDefaultsHeight, buttonWidth, kToolBarDefaultsHeight);
 }
 
 - (void)yb_browserPageIndexChanged:(NSUInteger)pageIndex totalPage:(NSUInteger)totalPage data:(id<YBImageBrowserCellDataProtocol>)data {
-//    switch (self->_operationType) {
-//        case YBImageBrowserToolBarOperationTypeSave: {
-//            if ([data respondsToSelector:@selector(yb_browserSaveToPhotoAlbum)] && [data respondsToSelector:@selector(yb_browserAllowSaveToPhotoAlbum)] && [data yb_browserAllowSaveToPhotoAlbum]) {
-//                self.operationButton.hidden = NO;
-//                [self.operationButton setImage:[YBIBFileManager getImageWithName:@"ybib_save"] forState:UIControlStateNormal];
-//            } else {
-//                self.operationButton.hidden = YES;
-//            }
-//        }
-//            break;
-//        case YBImageBrowserToolBarOperationTypeMore: {
-//            self.operationButton.hidden = NO;
-//            [self.operationButton setImage:[YBIBFileManager getImageWithName:@"ybib_more"] forState:UIControlStateNormal];
-//        }
-//            break;
-//        case YBImageBrowserToolBarOperationTypeCustom: {
-//            self.operationButton.hidden = !self->_operation;
-//        }
-//            break;
-//    }
     
     self->_data = data;
     
@@ -141,34 +118,19 @@ static CGFloat kToolBarDefaultsHeight = 50.0;
 
 - (UILabel *)indexLabel {
     if (!_indexLabel) {
-//        _indexLabel = [UILabel new];
-//        _indexLabel.textColor = [UIColor whiteColor];
-//        _indexLabel.font = [UIFont boldSystemFontOfSize:16];
-//        _indexLabel.textAlignment = NSTextAlignmentLeft;
-//        _indexLabel.adjustsFontSizeToFitWidth = YES;
-        
-        _indexLabel = [UILabel ff_labelWithTitle:@"" color:RGB(255, 255, 255) fontType:PF_NormalType fontSize:15*kDesignScaleXForIP6];
+        _indexLabel = [UILabel new];
+        _indexLabel.textColor = [UIColor whiteColor];
+        _indexLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15*kYBDesignScaleXForIP6];
         _indexLabel.textAlignment = NSTextAlignmentCenter;
-        _indexLabel.backgroundColor = RGBA(0, 0, 0, 0.3);
-        _indexLabel.layer.borderColor = RGB(102, 102, 102).CGColor;
+        _indexLabel.backgroundColor = YBRGBA(0, 0, 0, 0.3);
+        _indexLabel.layer.borderColor = YBRGB(102, 102, 102).CGColor;
         _indexLabel.layer.borderWidth = 0.5;
         _indexLabel.layer.masksToBounds = YES;
-        _indexLabel.layer.cornerRadius = 4*kDesignScaleXForIP6;
-        _indexLabel.frame = CGRectMake(161*kDesignScaleXForIP6, [HWUIManager iphoneXNavgationBarOffset]+26*kDesignScaleXForIP6, 54*kDesignScaleXForIP6, 29*kDesignScaleXForIP6);
+        _indexLabel.layer.cornerRadius = 4*kYBDesignScaleXForIP6;
+        _indexLabel.frame = CGRectMake(161*kYBDesignScaleXForIP6, ([YBIBUtilities isIphoneX] ? 24 : 0)+26*kYBDesignScaleXForIP6, 54*kYBDesignScaleXForIP6, 29*kYBDesignScaleXForIP6);
     }
     return _indexLabel;
 }
-
-//- (UIButton *)operationButton {
-//    if (!_operationButton) {
-//        _operationButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        _operationButton.titleLabel.font = [UIFont boldSystemFontOfSize:16];
-//        _operationButton.titleLabel.adjustsFontSizeToFitWidth = YES;
-//        [_operationButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        [_operationButton addTarget:self action:@selector(clickOperationButton:) forControlEvents:UIControlEventTouchUpInside];
-//    }
-//    return _operationButton;
-//}
 
 - (CAGradientLayer *)gradient {
     if (!_gradient) {
