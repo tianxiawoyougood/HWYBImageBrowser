@@ -1,5 +1,5 @@
 PODS:
-  - HWYBImageBrowser (0.1.0):
+  - HWYBImageBrowser (0.1.2):
     - ReactiveObjC
     - SDWebImage
     - YYImage
@@ -25,7 +25,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  HWYBImageBrowser: 81a351f259e2205d352aae4e216aa309792e7228
+  HWYBImageBrowser: b2001cb188d361b42700eb9d484baec0b719a316
   ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
   SDWebImage: c5594f1a19c48d526d321e548902b56b479cd508
   YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
