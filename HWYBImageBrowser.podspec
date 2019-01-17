@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'HWYBImageBrowser'
-  s.version          = '0.1.2'
+  s.version          = '0.1.3'
   s.summary          = '修改YBImageBrowser库完成业务需求'
 
 # This description is used to generate tags and improve search results.
@@ -30,7 +30,7 @@ TODO: Add long description of the pod here.
 
   s.ios.deployment_target = '8.0'
 
-  s.source_files = 'HWYBImageBrowser/Classes/*.{h,m}', 'HWYBImageBrowser/Classes/VideoBrowse/*.{h,m}', 'HWYBImageBrowser/Classes/Protocol/*.{h,m}', 'HWYBImageBrowser/Classes/ImageBrowse/*.{h,m}', 'HWYBImageBrowser/Classes/Helper/*.{h,m}', 'HWYBImageBrowser/Classes/Base/*.{h,m}', 'HWYBImageBrowser/Classes/AuxiliaryView/*.{h,m}'
+  s.source_files = 'HWYBImageBrowser/Classes/**/*.{h,m}'
   
   s.resources = "HWYBImageBrowser/Assets/YBImageBrowser.bundle"
   #s.resource_bundles = {
